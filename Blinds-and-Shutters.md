@@ -22,12 +22,12 @@ There are three shutter modes which are defined according to the [PulseTime](Com
    - `Backlog PulseTime1 0; PulseTime2 0`
    - `Backlog Interlock 1,2; Interlock ON` (Interlocked relay pair)
 
-1. **ShutterMode 1** - Circuit Safe   
+1. **ShutterMode 1** - Circuit Safe and Stepper Motors   
    First relay: ON/OFF, Second relay: UP/DOWN
    - `Backlog PulseTime1 0; PulseTime2 0`
    - `Interlock OFF`
 
-1. **ShutterMode 2** - Stepper Motors   
+1. **ShutterMode 2** - Pulse Motors   
    First relay: OFF/DOWN PULSE, Second relay: OFF/UP PULSE
    - `Backlog PulseTime1 2; PulseTime2 2`
    - `Backlog Interlock 1,2; Interlock ON` (Interlocked relay pair)
@@ -61,8 +61,11 @@ With four shutters, eight `Relay<x>` components are needed. If manual operation 
 
 Using manual operation `Switch<x>` pairs may require setting `SwitchMode<x> 4` (inverse follow) for proper switch behavior.
 
-## Stepper Motor Support
+## Pulse Motor Support
 There are shutters that have two relays but only need a pulse to start or stop. Depending on the current situation a pulse will stop the shutter or send it into a specific direction. To use these kinds of shutters a [`PulseTime`](Commands#pulsetime) must be defined on each relay. The minimum setting that seems to make it work consistently is `2`. A setting of `1` does not work. If the shutter moves too fast and does not react to a stop command, increase the setting to `3` or `4`. 
+
+## Stepper Motor Support
+You can also use Stepper motors like the NEMA17 with a A4988 driver to operate with the shuttter. To get best results the stepping factor should be "1". This mean MS1, MS2, MS3 LOW. Additionally change the PWM Frequency to a multiple of 200. 200..1400 seem to work for different speed. Define following relays and connect with the A4988. Relay1i = EN (Enable), Relay2 = DIR (Direction), PWM1 = STP (Stepper). Set PWM to 50%. If direction is inverse change Relay2 -> Relay2i. Ensure MOTORDELAY = 0.
 
 ## Calibration
 [Shutter calibration video tutorial](https://www.youtube.com/watch?v=Z-grrvnu2bU)  
